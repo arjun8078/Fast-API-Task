@@ -1,6 +1,6 @@
-from sqlalchemy import Column, Integer, String, Boolean
+from sqlalchemy import Column, ForeignKey, Integer, String, Boolean
 from database import engine
-from sqlalchemy.orm import declarative_base
+from sqlalchemy.orm import declarative_base, relationship
 
 Base = declarative_base()
 
@@ -11,6 +11,8 @@ class TaskDB(Base):
     title = Column(String)
     name = Column(String)
     completed = Column(Boolean, default=False)
+    user_id=Column(Integer,ForeignKey("Users.id"))
+    user=relationship("UserDB")
 
 class UserDB(Base):
     __tablename__="Users"
