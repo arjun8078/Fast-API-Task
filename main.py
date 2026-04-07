@@ -20,4 +20,5 @@ app.include_router(task.router)
 
 @app.get("/")
 def home():
-    return {"message": "FastAPI running 🚀"}
+    return {"message": "FastAPI running 🚀","docs": "/docs",
+        "status": "running"}
