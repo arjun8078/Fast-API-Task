@@ -18,7 +18,7 @@ oauth2_schema=OAuth2PasswordBearer(tokenUrl="login")
 
 def create_access_token(data:dict):
     to_encode=data.copy()
-    exp_time=datetime.utcnow() + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+    exp_time=datetime.utcnow() + timedelta(minutes=int(ACCESS_TOKEN_EXPIRE_MINUTES))
     to_encode.update({"exp":exp_time})
     return jwt.encode(to_encode,SECRET_KEY,algorithm=ALGORITHM)
 
