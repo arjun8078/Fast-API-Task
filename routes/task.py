@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Query
 from database import SessionLocal
 from models import TaskDB
 from schemas import Task
@@ -25,9 +25,18 @@ def create_task(task: Task, current_user=Depends(get_current_user)):
 
 
 @router.get("/tasks")
-def get_tasks(current_user=Depends(get_current_user)):
+def get_tasks(current_user=Depends(get_current_user),
+              limit:int=Query(10,description="Give 10 tasks"),
+              skip:int=Query(0,description="Number of skips of task"),
+              search:str=Query(None,description="Search query")):
     db = SessionLocal()
-    return db.query(TaskDB).filter(TaskDB.user_id == current_user.id).all()
+    query=db.query(TaskDB).filter(TaskDB.user_id == current_user.id).all()
+    
+    if(search):
+        query=query.filter(TaskDB.title.contains(search))
+
+    tasks=query.offset(skip).limit(limit).all()
+    return tasks
 
 
 @router.put("/tasks/{task_id}")
